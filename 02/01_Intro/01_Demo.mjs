@@ -76,9 +76,9 @@ db.numberDT.find();
 
 db.numberDT.insertMany([
     { _id: 1, value: 1, expectedType: 'Int32' },
-    { _id: 2, value: Long("1"), expectedType: 'Long' },
+    { _id: 2, value: NumberLong("1"), expectedType: 'Long' },
     { _id: 3, value: 1.01, expectedType: 'Double' },
-    { _id: 4, value: Decimal128("1.01"), expectedType: 'Decimal128' },
+    { _id: 4, value: NumberDecimal("1.01"), expectedType: 'Decimal' },
     { _id: 5, value: 3200000001, expectedType: 'Double' }
 ])
 

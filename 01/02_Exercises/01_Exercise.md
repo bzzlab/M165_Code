@@ -1,5 +1,4 @@
-/*
-Aufgabe: Filmdatenbank einrichten
+### Übung 1.01: Filmdatenbank einrichten
 Richten Sie einen ersten Prototypen einer Filmdatenbank ein.
 
 Die folgenden Schritte helfen Ihnen, die Aktivität abzuschließen:
@@ -9,4 +8,3 @@ Die folgenden Schritte helfen Ihnen, die Aktivität abzuschließen:
 4. Prüfen Sie, ob die Documents eingefügt wurden.
 5. Erstellen Sie eine Reward-Collection und fügen Sie die folgenden Beispieldaten ein data2.txt.
 6. Prüfen Sie auch in diesem Schritt, ob die Documents eingefügt wurden.
-*/

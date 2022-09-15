@@ -1,6 +1,6 @@
 use mflix_demo;
 /*
-Inserting Documents
+Inserting one Document
 The method insertOne() is used to create a new document in a collection.
 The function is executed on the collection and takes the document to be inserted as an argument.
 */
@@ -28,7 +28,8 @@ db.movies.insertMany([
 ])
 
 /*
-Inserting without _id is possible. An id of type ObjectId will be generated and added to the document.
+Inserting without _id is possible.
+An id of type ObjectId will be generated and added to the document.
 */
 db.movies.insertOne({"title": "Thelma"})
 db.movies.find({"title" : "Thelma"})

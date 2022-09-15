@@ -1,5 +1,6 @@
 /*
 REPLACING DOCUMENTS
+Replacing Documents
 Sometimes you may want to replace completely an incorrectly inserted document in a collection.
 Or consider that, often, the data stored in documents is changed over time.
 Or, perhaps, to support your product's new requirements, you may want to alter the way your documents

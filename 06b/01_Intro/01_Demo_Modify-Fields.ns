@@ -1,0 +1,111 @@
+use mflix_demo;
+
+/* Modify Fields
+The find and replace operation is very useful when all or most fields of a document are
+modified. But, using it to update only particular fields in the documents will not be easy
+and it's not suitable.
+*/
+
+db.movies.drop();
+//Add four new records to the collection
+db.movies.insertMany([
+  {_id: 1, title: "Macbeth", year: 2014, type: "series"},
+  {_id: 2, title: "Inside Out", year: 2015, type: "movie", num_mflix_comments: 1},
+  {_id: 3, title: "The Martian", year: 2015, type: "movie", num_mflix_comments: 1},
+  {_id: 4, title: "Everest", year: 2015, type: "movie", num_mflix_comments: 1}
+])
+
+/*
+Update one field
+Change the field year for the movie Macbeth
+*/
+db.movies.updateOne(
+    {title : "Macbeth"},
+    {$set : {year: 2015}}
+)
+
+db.movies.find()
+
+/* Update more than one field
+Change the field year for the movie Macbeth
+*/
+db.movies.updateOne(
+  {title: "Macbeth"},
+  {$set : {type: "movie", num_mflix_comments: 1}}
+)
+
+/*
+Multiple Documents Matching a Condition
+updateOne() updates always only one document in the collection.
+If the given query condition matches more than one document,
+only the first document will be modified:
+*/
+db.movies.updateOne(
+  {type : "movie"},
+  {$set : {flag: "modified"}}
+)
+db.movies.find()
+
+
+/*
+Upsert with updateOne()
+With upsert the document will be updated if it is found. However, if the document is not found,
+a new document is created inside the collection. updateOne() also supports upserts with an additional
+flag in the command.
+*/
+db.movies.updateOne(
+  {title : "Sicario"},
+  {$set : {year: 2015}},
+  {upsert : true}
+)
+db.movies.find()
+
+/*
+Updating with findOneAndUpdate()
+findOneAndUpdate() is capable of doing everything that updateOne() does with a few additional
+* By default, it returns the old document in the response.
+* Returning a new Document in the response
+*/
+db.movies.findOneAndUpdate(
+  {title : "Macbeth"},
+  {$set : {num_mflix_comments: 11}}
+)
+db.movies.find()
+
+/*
+Returning a New Document in Respons
+*/
+db.movies.findOneAndUpdate(
+  {title : "Macbeth"},
+  {$set : {num_mflix_comments: 15}},
+  {returnNewDocument : true}
+)
+db.movies.find()
+
+/*
+Updating Multiple Documents
+updateOne(), findOneAndUpdate() are used to update one document in a collection while
+updateMany() is used to update multiple documents in a collection.
+The following are a few important points about the update operations and are applicable to all three functions:
+* None of the update functions allows you to change the _id field.
+* The order of the fields in a document is always maintained, except when the update includes renaming a field.
+However, the _id field will always appear first.
+* Update operations are atomic on a single document. A document cannot be modified until another process
+has finished updating it.
+* All of the update functions support upsert. "upsert: true" needs to be passed as an option.
+*/
+
+/*
+Consider that our movie collection has four movies that were released in 2015.
+*/
+db.movies.find({"year" : 2015}).count()
+
+/*
+Add a field named languages to these movies, as follows:
+*/
+db.movies.updateMany(
+  {"year" : 2015},
+  {$set : {"languages" : ["English"]}}
+)
+db.movies.find({"year" : 2015},{year:1, languages:1,title:1}).count()
+

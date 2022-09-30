@@ -1,0 +1,195 @@
+use mflix_demo;
+db.movies.deleteMany({});
+//Add four new records to the collection
+db.movies.insertMany([
+  {_id: 1, title: "Macbeth", year: 2014, type: "series"},
+  {_id: 2, title: "Inside Out", year: 2015, type: "movie", num_mflix_comments: 1},
+  {_id: 3, title: "The Martian", year: 2015, type: "movie", num_mflix_comments: 1},
+  {_id: 4, title: "Everest", year: 2015, type: "movie", num_mflix_comments: 1}
+])
+
+
+/*
+UPDATE OPERATORS
+In order to facilitate different types of update commands,
+MongoDB provides various update operators or update modifiers such as set, multiply, increment, and more.
+*/
+
+/*
+Set ($set)
+The $set operator is used to set the values of fields in a document.
+It is the most commonly used operator, as it can be easily used to set values of any type of field or
+add new fields in a document.
+*/
+
+/*
+Increment ($inc)
+The increment operator ($inc) is used to increment the value of a numeric field by a specific number
+
+The following update operation finds a movie by its title, increments the num_mflix_comments
+field by 3 and a non-existent field called rating by 1.5. It also sets returnNewDocument to true,
+so that the updated record will be returned in the response.
+*/
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$inc : {"num_mflix_comments" : 3, "rating" : 1.5}},
+  {returnNewDocument : true}
+)
+db.movies.find()
+
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$inc : {"num_mflix_comments" : -2, "rating" : -0.2}},
+  {returnNewDocument : true}
+)
+
+/*
+Multiply ($mul)
+The multiplication ($mul) operator is used to multiply the value of a
+numeric field by the given number. The operator accepts a document
+containing pairs of field names and numbers and can only be used on
+numeric fields.
+*/
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$mul : {"rating" : 2}},
+  {returnNewDocument : true}
+)
+
+/*
+When using a non-existent field with $mul, we should always remember that no matter
+what multiplier we provide, the field will be created and always set to zero.
+This is because, with a multiplication operation, the value of a nonexistent numeric
+field is assumed to be zero.
+*/
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$mul : {"box_office_collection" : 16.3}},
+  {returnNewDocument : true}
+)
+
+/*
+Rename ($rename)
+The $rename operator is used to rename fields.
+* If the field is not already present in the document, the operator ignores it and does nothing.
+* The provided field and its new name must be different. If they're the same, the operation fails with an error.
+* If a document already contains a field with the provided new name, the existing field will be removed.
+*/
+ db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$set : {"imdb_rating" : 6.6}},
+  {returnNewDocument : true}
+)
+
+/*
+Now rename the field num_mflix_comments to comments and
+rename the field imdb_rating to rating
+*/
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$rename : {"num_mflix_comments" : "comments", "imdb_rating" : "rating"}},
+  {returnNewDocument : true}
+)
+
+/*
+Using this operator, a field can also be moved to and from nested documents.
+To do so, you have to use a dot notation, like this:
+*/
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$rename : {"rating" : "imdb.rating"}},
+  {returnNewDocument : true}
+)
+
+/*
+Current Date ($currentDate)
+The operator $currentDate is used to set the value of a given field as the current date or timestamp.
+* If the field is not present already, it will be created with the current date or timestamp value.
+* Providing a field name with a value of true will insert the current date as a Date. Alternatively,
+a $type operator can be used to explicitly specify the value as a date or timestamp.
+
+The findOneAndUpdate operation sets three fields using the $currentDate operator.
+* The field created_date has a value of true, which defaults to a Date type.
+* The other two fields use a dot notation and explicit $type declaration.
+*/
+
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$currentDate : {
+    "created_date" : true,
+       "last_updated.date" : {$type : "date"},
+       "last_updated.timestamp" : {$type : "timestamp"}
+  }},
+  {returnNewDocument : true}
+)
+
+db.movies.find({"title" : "Macbeth"})
+
+/* Removing Fields ($unset)
+The $unset operator removes given fields from a document.
+The operator accepts a document containing pairs of field names and values and
+removes all the given fields from the matched document.
+As the provided fields are being removed, their specified values have no impact.
+
+Example:
+The update operation removes four fields from the document.
+Multiple fields are removed and by providing them with different values have no impact.
+* The first field, created_date, is provided with a value of an empty string.
+* The next two fields have some dummy values, and the field imdb has a null value.
+* The last field, flag, is also provided with an empty string.
+* Out of these five fields, imdb and last_updated are nested fields.
+*/
+
+db.movies.find({"title" : "Macbeth"})
+db.movies.findOneAndUpdate(
+  {"title" : "Macbeth"},
+  {$unset : {
+    "created_date" : "",
+    "last_updated" : "dummy_value",
+    "box_office_collection": 142.2,
+    "imdb" : null,
+    "flag" : ""
+  }},
+  {returnNewDocument : true}
+)
+
+/*
+Setting When Inserted ($setOnInsert)
+The operator $setOnInsert is similar to $set; however, it only sets the given fields when
+an insert happens during an upsert operation.
+It has no impact when the upsert operation results in the update of existing documents.
+
+Example
+The output shows that $setOnInsert did not change the document.
+However, the field comment is now renamed to num_mflix_comments.
+Also, the field created_time is not added because the upsert operation was used
+to update an existing document.
+*/
+db.movies.findOneAndUpdate(
+  {"title":"Macbeth"},
+  {
+    $rename:{"comments":"num_mflix_comments"},
+    $setOnInsert:{"created_time":new Date()}
+  },
+  {
+    upsert : true,
+    returnNewDocument:true
+  }
+)
+
+/*
+The only difference between this snippet and the previous one is that this operation
+finds a movie named Spy, which is not present in our collection. Because of the upsert,
+the operation will result in adding a document to the collection.
+*/
+db.movies.findOneAndUpdate(
+  {"title":"Spy"},
+  {
+    $rename:{"comments":"num_mflix_comments"},
+    $setOnInsert:{"created_time":new Date()}
+  },
+  {
+    upsert : true,
+    returnNewDocument:true
+  }
+)

@@ -30,12 +30,6 @@ Movies.find({}, {title: 1, languages: 1},
     });
 
 
-console.log("get all movies. Output titles and their languages. ")
-Movies.find({}, {title: 1, languages: 1},
-    function (err, movies) {
-        console.log(movies);
-    });
-
 console.log("get plot by title");
 //Query hier
 console.log("get count by year");

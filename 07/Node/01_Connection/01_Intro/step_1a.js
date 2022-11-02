@@ -1,6 +1,6 @@
 let mongoose = require("mongoose");
 mongoose.connect(
-    "mongodb://localhost:27017/mflix",
+    "mongodb://127.0.0.1:27017/mflix",
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
 mongoose.connection.on("error", function() {

@@ -1,0 +1,64 @@
+/*
+Übung 01-1: Filmdatenbank einrichten
+Richten Sie einen ersten Prototypen einer Filmdatenbank ein.
+
+Die folgenden Schritte helfen Ihnen, die Aktivität abzuschließen:
+*/
+//1. Verbinden Sie sich mit Ihrer Datenbank.
+//2. Erstellen Sie eine Filmdatenbank namens moviesDB.
+use moviesDB;
+//3. Erstellen Sie eine Filmcollection und fügen Sie die folgenden Beispieldaten ein data1.txt.
+db.movies.insertMany([
+    {
+        "title": "Rocky",
+        "releaseDate": new Date("1976-12-03"),
+        "genre": "Action",
+        "about": "A small-time boxer gets a supremely rare chance to fight aheavy-weight champion in a bout in which he strives to go the distance for his self-respect.",
+        "countries": ["USA"],
+        "cast" : ["Sylvester Stallone","Talia Shire", "Burt Young"],
+        "writers" : ["Sylvester Stallone"],
+        "directors" : ["John G. Avildsen"]
+    },
+    {
+        "title": "Rambo 4",
+        "releaseDate": new Date("2008-01-25"),
+        "genre": "Action",
+        "about": "In Thailand, John Rambo joins a group of mercenaries to venture into war-torn Burma, and rescue a group of Christian aid workers who were kidnapped by the ruthless local infantry unit.",
+        "countries": ["USA"],
+        "cast" : [" Sylvester Stallone", "Julie Benz","Matthew Marsden"],
+        "writers" : ["Art Monterastelli","Sylvester Stallone"],
+        "directors" : ["Sylvester Stallone"]
+    }
+])
+//4. Prüfen Sie, ob die Documents eingefügt wurden.
+db.movies.find();
+//db.movies.drop()
+//5. Erstellen Sie eine Reward-Collection und fügen Sie die folgenden Beispieldaten ein data2.txt.
+db.awards.insertOne({
+    "title": "Oscars",
+    "year": "1976",
+    "category": "Best Film",
+    "nominees": ["Rocky","All The President's Men","Bound For Glory","Network","Taxi Driver"],
+    "winners" :
+    [
+        {
+            "movie" : "Rocky"
+        }
+    ]
+});
+db.awards.insertOne({
+    "title": "Oscars",
+    "year": "1976",
+    "category": "Actor In A Leading Role",
+    "nominees": ["PETER FINCH","ROBERT DE NIRO","GIANCARLO GIANNINI","WILLIAM  HOLDEN","SYLVESTER STALLONE"],
+    "winners" :
+    [
+        {
+            "actor" : "PETER FINCH",
+            "movie" : "Network"
+        }
+    ]
+});
+//6. Prüfen Sie auch in diesem Schritt, ob die Documents eingefügt wurden.
+db.awards.find();
+db.dropDatabase();

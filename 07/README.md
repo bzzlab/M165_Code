@@ -1,23 +1,3 @@
-# Modul 165 - NoSQL-Datenbanken einsetzen
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-## Articles
-* https://github.com/Automattic/mongoose/issues/6254
-* https://medium.com/globant/mongodb-mongoose-query-optimizations-63cfc6def9d9
-
-
-
+### App with MongoDB with Node.js
+This part is archived in a separate github repository
+which is [here](https://github.com/bzzlab/M165_NodeApp_Code.git)
